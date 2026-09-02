@@ -16,7 +16,7 @@ export default function Layout() {
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
         <Header />
         <main className="flex-1 overflow-auto">
-          <div className="p-6 max-w-[1600px] mx-auto">
+          <div className="p-3.5 sm:p-6 max-w-[1600px] mx-auto">
             <Outlet />
           </div>
         </main>

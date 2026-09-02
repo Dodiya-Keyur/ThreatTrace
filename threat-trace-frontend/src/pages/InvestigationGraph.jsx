@@ -283,11 +283,11 @@ export default function InvestigationGraph() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col bg-white text-black -m-6">
+    <div className="flex h-auto lg:h-[calc(100vh-4rem)] flex-col bg-white text-black -m-3.5 sm:-m-6">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 bg-white shrink-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 px-4 sm:px-6 py-4 bg-white shrink-0 gap-3">
         <div>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
             <span
               onClick={() => navigate('/cases')}
               className="hover:text-black cursor-pointer font-medium"
@@ -298,7 +298,7 @@ export default function InvestigationGraph() {
             <select
               value={activeCaseKey}
               onChange={(e) => navigate(`/graph/${e.target.value}`)}
-              className="text-xs font-mono font-bold text-gray-700 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 outline-none cursor-pointer"
+              className="text-xs font-mono font-bold text-gray-700 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 outline-none cursor-pointer max-w-[200px] sm:max-w-none truncate"
             >
               {allCases.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -319,7 +319,7 @@ export default function InvestigationGraph() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
           <button
             onClick={handleResetGraph}
             className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3.5 py-2 text-xs font-semibold hover:bg-gray-100 transition-colors cursor-pointer"
@@ -339,7 +339,7 @@ export default function InvestigationGraph() {
       </div>
 
       {/* Top Entity Types Legend Bar */}
-      <div className="flex items-center gap-4 px-6 py-2.5 bg-white border-b border-gray-200 flex-wrap text-xs text-gray-600 shrink-0">
+      <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-2.5 bg-white border-b border-gray-200 flex-wrap text-xs text-gray-600 shrink-0">
         <span className="font-bold uppercase tracking-wider text-[11px] text-gray-500">
           Entity Types:
         </span>
@@ -369,10 +369,10 @@ export default function InvestigationGraph() {
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex min-h-0 flex-1">
+      {/* Main Content Area: Column on mobile (Entity Details at bottom), Row on desktop */}
+      <div className="flex flex-col lg:flex-row min-h-0 flex-1">
         {/* Graph Area */}
-        <div className="relative flex-1 bg-gray-50">
+        <div className="relative h-[380px] sm:h-[450px] lg:h-auto lg:flex-1 bg-gray-50 shrink-0 lg:shrink">
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -389,8 +389,8 @@ export default function InvestigationGraph() {
           </ReactFlow>
         </div>
 
-        {/* Details Sidebar */}
-        <aside className="w-[320px] border-l border-gray-200 bg-white flex flex-col shrink-0">
+        {/* Details Panel: Below graph on mobile, right sidebar on desktop */}
+        <aside className="w-full lg:w-[320px] border-t lg:border-t-0 lg:border-l border-gray-200 bg-white flex flex-col shrink-0">
           <div className="border-b border-gray-200 px-5 py-4">
             <h2 className="text-sm font-bold text-black">
               Entity Details

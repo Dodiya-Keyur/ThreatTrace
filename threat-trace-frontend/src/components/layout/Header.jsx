@@ -215,17 +215,10 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 h-16 shrink-0 bg-[var(--color-canvas)] border-b border-[var(--color-border-subtle)] flex items-center justify-between px-6 gap-4">
-      {/* Left: Mobile menu + SOC Title */}
-      <div className="flex items-center gap-4 shrink-0">
-        <button
-          onClick={toggle}
-          className="lg:hidden p-1.5 rounded-[var(--radius-sm)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-elevated)] cursor-pointer"
-          aria-label="Toggle menu"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-        <span className="text-xs font-bold text-slate-800 uppercase tracking-wider hidden sm:block">
+    <header className="sticky top-0 z-50 h-16 shrink-0 bg-[var(--color-canvas)] border-b border-[var(--color-border-subtle)] flex items-center justify-between px-3 sm:px-6 gap-3 sm:gap-4">
+      {/* Left: SOC Title */}
+      <div className="flex items-center gap-3 shrink-0">
+        <span className="text-xs font-bold text-slate-800 uppercase tracking-wider hidden md:block">
           ThreatTrace SOC
         </span>
       </div>
