@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+/* ============================================
+   ThreatTrace Design Tokens & Global Styles
+   ============================================ */
+
+@theme {
+  /* --- Canvas & Surface Colors --- */
+  --color-canvas: #FFFFFF;
+  --color-surface: #FAFAFA;
+  --color-surface-elevated: #F4F4F5;
+
+  /* --- Border Colors --- */
+  --color-border-subtle: #E4E4E7;
+  --color-border-strong: #18181B;
+
+  /* --- Text Colors --- */
+  --color-text-primary: #09090B;
+  --color-text-secondary: #52525B;
+  --color-text-muted: #A1A1AA;
+
+  /* --- Brand --- */
+  --color-brand-black: #09090B;
+  --color-brand-white: #FFFFFF;
+
+  /* --- Threat Semantic Colors --- */
+  --color-threat-critical: #DC2626;
+  --color-threat-critical-bg: #FEF2F2;
+  --color-threat-high: #D97706;
+  --color-threat-high-bg: #FFFBEB;
+  --color-threat-medium: #CA8A04;
+  --color-threat-medium-bg: #FEFCE8;
+  --color-threat-low: #059669;
+  --color-threat-low-bg: #ECFDF5;
+  --color-threat-info: #2563EB;
+  --color-threat-info-bg: #EFF6FF;
+
+  /* --- Typography --- */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* --- Radius --- */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* --- Sidebar --- */
+  --sidebar-width: 250px;
+  --sidebar-collapsed: 64px;
+  --header-height: 64px;
+}
+
+/* ============================================
+   Base Styles (must live inside @layer so Tailwind utilities win)
+   ============================================ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    background-color: var(--color-canvas);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    accent-color: var(--color-brand-black);
+  }
+}
+
+/* ============================================
+   Reusable Form & UI Components
+   ============================================ */
+
+@layer components {
+  .form-card {
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .form-input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-brand-black);
+    box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.08);
+  }
+
+  .form-btn-primary {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--color-brand-black);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+
+  .form-btn-primary:hover:not(:disabled) {
+    background-color: #27272a;
+  }
+
+  .form-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-link {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .form-link:hover {
+    text-decoration: underline;
+  }
+
+  .form-error {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-threat-critical-bg);
+    color: var(--color-threat-critical);
+    border: 1px solid #fecaca;
+  }
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ============================================
+   React Flow Graph Cursors & Interactions
+   ============================================ */
+.react-flow__node {
+  cursor: pointer !important;
+}
+
+.react-flow__pane {
+  cursor: grab !important;
+}
+
+.react-flow__pane:active {
+  cursor: grabbing !important;
+}
+
+.react-flow__edge {
+  cursor: pointer !important;
+}
+
+.react-flow__handle {
+  cursor: crosshair !important;
+}
+
+.react-flow__controls button {
+  cursor: pointer !important;
+}
+
+/* ============================================
+   Leaflet Map Stacking & Navbar Isolation
+   ============================================ */
+.leaflet-container {
+  z-index: 0 !important;
+  isolation: isolate;
+}
+
+.leaflet-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ============================================
+   Focus Styles
+   ============================================ */
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-brand-black);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ============================================
+   Leaflet Map Overrides
+   ============================================ */
+
+.leaflet-container {
+  background: var(--color-surface) !important;
+  font-family: var(--font-sans) !important;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================
+   React Flow Overrides
+   ============================================ */
+
+.react-flow__node {
+  font-family: var(--font-sans) !important;
+}
+
+.react-flow__edge-text {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+}
+
+/* ============================================
+   Utility: Animate Pulse for skeletons
+   ============================================ */
+
+@keyframes shimmer {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ============================================
+   Threat Score Ring
+   ============================================ */
+
+@keyframes score-fill {
+  from { stroke-dashoffset: 283; }
+}
+
+.score-ring-animated {
+  animation: score-fill 1.5s ease-out forwards;
+}

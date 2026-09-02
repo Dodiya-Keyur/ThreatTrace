@@ -1,0 +1,25 @@
+Return-Path: <newsletter@acmecorp.com>
+Received: from mx.acmecorp.com (172.217.14.101) by acme-internal; Mon, 31 Aug 2026 10:00:00 +0000
+From: "Acme Corp Internal Communications" <newsletter@acmecorp.com>
+To: all-staff@acmecorp.com
+Subject: Monthly Company Newsletter - August 2026
+Date: Mon, 31 Aug 2026 09:59:00 +0000
+Message-ID: <20260831100000.LEGIT123@acmecorp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: mx.acmecorp.com;
+  spf=pass smtp.mailfrom=acmecorp.com;
+  dkim=pass header.d=acmecorp.com;
+  dmarc=pass header.from=acmecorp.com
+
+Hello Acme Team,
+
+Welcome to the August 2026 edition of our monthly internal newsletter. 
+
+This month, we celebrate the launch of our new engineering initiatives, welcome 15 new colleagues across our offices, and review our sustainability milestones.
+
+Have a wonderful week ahead!
+
+Best regards,
+Internal Communications Team
+Acme Corporation
