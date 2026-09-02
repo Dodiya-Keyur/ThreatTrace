@@ -1,9 +1,14 @@
-import uvicorn
 import os
 import sys
 
+# Ensure current directory is in sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from app.main import app
+import uvicorn
+
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
-    host = os.getenv("HOST", "0.0.0.0")
-    print(f"[INFO] Starting ThreatTrace AI Forensic Backend Server on http://{host}:{port} ...")
-    uvicorn.run("app.main:app", host=host, port=port, reload=False)
+    port = int(os.environ.get("PORT", 8000))
+    host = os.environ.get("HOST", "0.0.0.0")
+    print(f"[INFO] ThreatTrace API starting on host {host} and port {port}...")
+    uvicorn.run(app, host=host, port=port)
