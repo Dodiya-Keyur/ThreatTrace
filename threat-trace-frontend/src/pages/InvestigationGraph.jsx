@@ -1,105 +1,105 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  ReactFlow,
+import ReactFlow, {
   Background,
   Controls,
+  useNodesState,
+  useEdgesState,
   addEdge,
   Handle,
   Position,
-  useNodesState,
-  useEdgesState,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 import {
+  RotateCcw,
+  Download,
   Mail,
+  User,
   Globe,
   Wifi,
   Server,
   FolderOpen,
-  User,
-  RotateCcw,
-  Download,
-  Sparkles,
-  ExternalLink
+  ArrowRight,
+  ExternalLink,
+  ShieldAlert,
+  Info,
+  Layers
 } from 'lucide-react';
 import { getStoredCases } from '../utils/casesManager';
 
 const initialGraphPresets = {
   'case-1024': {
-    caseTitle: 'Fake Banking Campaign — PayPal Credential Phishing',
-    caseNum: '1024',
     nodes: [
       {
         id: 'sender',
         type: 'entity',
-        position: { x: 40, y: 220 },
+        position: { x: 50, y: 180 },
         data: {
           label: 'Attacker / Spoofed Sender',
           value: 'security@paypa1-security.com',
           type: 'Sender',
-          threatLevel: 'CRITICAL',
-          details: 'Originates from spoofed domain with failing DMARC/SPF checks.'
+          threatLevel: 'CRITICAL (98)',
+          details: 'Domain registered 12 days ago with anonymous WHOIS privacy.'
         },
       },
       {
         id: 'email',
         type: 'entity',
-        position: { x: 340, y: 220 },
+        position: { x: 380, y: 180 },
         data: {
           label: 'Email #1 (eml-001)',
           value: 'Urgent: Verify Your PayPal Account Immediately',
           type: 'Email',
-          threatLevel: 'CRITICAL (96/100)',
-          details: 'Credential harvesting phishing email with high urgency lure.'
+          threatLevel: 'CRITICAL (95)',
+          details: 'Contains high-urgency language and weaponized credential harvesting link.'
         },
       },
       {
         id: 'domain',
         type: 'entity',
-        position: { x: 650, y: 90 },
+        position: { x: 720, y: 50 },
         data: {
           label: 'Phishing Domain',
           value: 'paypa1-security.com',
           type: 'Domain',
-          threatLevel: 'CRITICAL',
-          details: 'Typosquatting domain registered 12 days ago under Panama privacy shield.'
+          threatLevel: 'CRITICAL (95)',
+          details: '94% string similarity typosquat of paypal.com, hosted on bulletproof server.'
         },
       },
       {
         id: 'ip',
         type: 'entity',
-        position: { x: 650, y: 270 },
+        position: { x: 720, y: 180 },
         data: {
           label: 'Originating IP Address',
           value: '185.220.101.4',
           type: 'IP Address',
-          threatLevel: 'CRITICAL',
-          details: 'Bulletproof hosting relay node in Moscow, Russia (Tor exit node).'
+          threatLevel: 'CRITICAL (92)',
+          details: 'Frankfurt, DE (Tor Exit Node / Bulletproof Hosting Pool).'
         },
       },
       {
         id: 'isp',
         type: 'entity',
-        position: { x: 960, y: 270 },
+        position: { x: 1040, y: 180 },
         data: {
           label: 'Hosting Provider / ASN',
           value: 'AS44050 (Anonymous Bulletproof Proxy)',
           type: 'ISP',
           threatLevel: 'HIGH',
-          details: 'Autonomous system with high ratio of malicious botnet traffic.'
+          details: 'Autonomous System with history of bulletproof phishing hosting.'
         },
       },
       {
         id: 'case',
         type: 'entity',
-        position: { x: 650, y: 450 },
+        position: { x: 720, y: 310 },
         data: {
           label: 'Investigation Dossier',
           value: 'Case #1024 (Active)',
           type: 'Case',
           threatLevel: 'CRITICAL',
-          details: 'Primary incident case tracking targeted credential phishing.'
+          details: 'Coordinated credential harvesting incident targeting finance staff.'
         },
       },
     ],
@@ -107,66 +107,64 @@ const initialGraphPresets = {
       { id: 'sender-email', source: 'sender', target: 'email', label: 'sent', animated: true },
       { id: 'email-domain', source: 'email', target: 'domain', label: 'contains link', animated: true },
       { id: 'email-ip', source: 'email', target: 'ip', label: 'originated from', animated: true },
-      { id: 'ip-isp', source: 'ip', target: 'isp', label: 'hosted by', animated: true },
+      { id: 'ip-isp', source: 'ip', target: 'isp', label: 'routed by', animated: true },
       { id: 'email-case', source: 'email', target: 'case', label: 'linked to', animated: true },
     ]
   },
   'case-1025': {
-    caseTitle: 'CEO Wire Fraud Attempt — Invoice Diversion',
-    caseNum: '1025',
     nodes: [
       {
         id: 'sender',
         type: 'entity',
-        position: { x: 40, y: 220 },
+        position: { x: 50, y: 180 },
         data: {
-          label: 'BEC Attacker',
-          value: 'ceo@hr-payroll-update.net',
+          label: 'Spear-Phishing Sender',
+          value: 'cfo-office@vendor-update.net',
           type: 'Sender',
-          threatLevel: 'HIGH',
-          details: 'Display name spoofing executive John Mitchell.'
+          threatLevel: 'CRITICAL (92)',
+          details: 'Display name spoof of internal executive requesting payment divert.'
         },
       },
       {
         id: 'email',
         type: 'entity',
-        position: { x: 340, y: 220 },
+        position: { x: 380, y: 180 },
         data: {
           label: 'Email #2 (eml-002)',
-          value: 'Urgent Wire Transfer: Vendor Invoice Payment #INV-8891',
+          value: 'Updated Wire Instructions - Pending Invoice #8847',
           type: 'Email',
-          threatLevel: 'HIGH (78/100)',
-          details: 'Wire diversion fraud attempting unauthorized $48,500 disbursement.'
+          threatLevel: 'CRITICAL (92)',
+          details: 'BEC wire diversion attack targeting Accounts Payable.'
         },
       },
       {
         id: 'domain',
         type: 'entity',
-        position: { x: 650, y: 90 },
+        position: { x: 720, y: 60 },
         data: {
           label: 'Lookalike Domain',
-          value: 'hr-payroll-update.net',
+          value: 'vendor-update.net',
           type: 'Domain',
-          threatLevel: 'HIGH',
-          details: 'Newly registered lookalike domain with active MX mail exchangers.'
+          threatLevel: 'HIGH (88)',
+          details: 'Registered 3 weeks ago via privacy proxy in Panama.'
         },
       },
       {
         id: 'ip',
         type: 'entity',
-        position: { x: 650, y: 270 },
+        position: { x: 720, y: 180 },
         data: {
-          label: 'Relay IP Address',
-          value: '103.45.12.89',
+          label: 'Originating Relay IP',
+          value: '194.26.29.112',
           type: 'IP Address',
-          threatLevel: 'HIGH',
-          details: 'Intermediate open relay located in Singapore.'
+          threatLevel: 'HIGH (85)',
+          details: 'Amsterdam, NL (Suspected VPN endpoint).'
         },
       },
       {
         id: 'case',
         type: 'entity',
-        position: { x: 650, y: 450 },
+        position: { x: 720, y: 300 },
         data: {
           label: 'Investigation Dossier',
           value: 'Case #1025',
@@ -201,7 +199,7 @@ function EntityNode({ data, selected }) {
 
   return (
     <div
-      className={`w-[230px] rounded-xl border bg-white shadow-sm hover:shadow-md transition-all cursor-pointer select-none ${
+      className={`w-[240px] rounded-xl border bg-white shadow-sm hover:shadow-md transition-all cursor-pointer select-none ${
         selected ? 'border-black ring-2 ring-black/20' : 'border-gray-200 hover:border-gray-400'
       }`}
       style={{ cursor: 'pointer' }}
@@ -210,8 +208,8 @@ function EntityNode({ data, selected }) {
 
       <div className="border-b border-gray-100 px-4 py-2 flex items-center justify-between cursor-pointer">
         <div className="flex items-center gap-1.5">
-          <Icon className="w-3.5 h-3.5 text-gray-400" />
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+          <Icon className="w-3.5 h-3.5 text-gray-500" />
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
             {data.type}
           </p>
         </div>
@@ -250,12 +248,12 @@ export default function InvestigationGraph() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(currentPreset.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(currentPreset.edges);
-  const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedNode, setSelectedNode] = useState(currentPreset.nodes[0]);
 
   useEffect(() => {
     setNodes(currentPreset.nodes);
     setEdges(currentPreset.edges);
-    setSelectedNode(null);
+    setSelectedNode(currentPreset.nodes[0]);
   }, [activeCaseKey]);
 
   const onConnect = useCallback(
@@ -279,13 +277,34 @@ export default function InvestigationGraph() {
   const handleResetGraph = () => {
     setNodes(currentPreset.nodes);
     setEdges(currentPreset.edges);
-    setSelectedNode(null);
+    setSelectedNode(currentPreset.nodes[0]);
+  };
+
+  const handleExportPDF = () => {
+    window.print();
   };
 
   return (
-    <div className="flex h-auto lg:h-[calc(100vh-4rem)] flex-col bg-white text-black -m-3.5 sm:-m-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 px-4 sm:px-6 py-4 bg-white shrink-0 gap-3">
+    <div className="flex flex-col bg-white text-black min-h-screen">
+      {/* Print-Only Formal Dossier Header */}
+      <div className="hidden print:block border-b-2 border-black pb-4 mb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-black uppercase tracking-wider text-black">
+              ThreatTrace SOC Forensic Intelligence Report
+            </h1>
+            <p className="text-xs text-gray-600 font-mono mt-0.5">
+              Threat Relationship Graph Dossier • {activeCaseKey.toUpperCase()} • Classification: TLP:AMBER
+            </p>
+          </div>
+          <div className="text-right text-xs font-mono text-gray-500">
+            Exported: {new Date().toISOString().replace('T', ' ').substring(0, 19)} UTC
+          </div>
+        </div>
+      </div>
+
+      {/* Screen Interactive Header (Hidden on Print) */}
+      <div className="no-print flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 px-4 sm:px-6 py-4 bg-white shrink-0 gap-3">
         <div>
           <div className="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
             <span
@@ -315,7 +334,7 @@ export default function InvestigationGraph() {
           </h1>
 
           <p className="mt-0.5 text-xs sm:text-sm text-gray-500">
-            Explore relationships between suspicious email entities and network infrastructure.
+            Explore relationships between suspicious email entities, infrastructure nodes, and attack vectors.
           </p>
         </div>
 
@@ -329,17 +348,17 @@ export default function InvestigationGraph() {
           </button>
 
           <button
-            onClick={() => window.print()}
+            onClick={handleExportPDF}
             className="flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-xs font-semibold text-white hover:bg-gray-800 transition-colors shadow-xs cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export</span>
+            <span>Export Graph (PDF)</span>
           </button>
         </div>
       </div>
 
       {/* Top Entity Types Legend Bar */}
-      <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-2.5 bg-white border-b border-gray-200 flex-wrap text-xs text-gray-600 shrink-0">
+      <div className="flex items-center gap-3 sm:gap-5 px-4 sm:px-6 py-2.5 bg-gray-50 border-b border-gray-200 flex-wrap text-xs text-gray-700 shrink-0">
         <span className="font-bold uppercase tracking-wider text-[11px] text-gray-500">
           Entity Types:
         </span>
@@ -369,50 +388,65 @@ export default function InvestigationGraph() {
         </div>
       </div>
 
-      {/* Main Content Area: Column on mobile (Entity Details at bottom), Row on desktop */}
-      <div className="flex flex-col lg:flex-row min-h-0 flex-1">
-        {/* Graph Area */}
-        <div className="relative h-[380px] sm:h-[450px] lg:h-auto lg:flex-1 bg-gray-50 shrink-0 lg:shrink">
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            nodeTypes={nodeTypes}
-            onConnect={onConnect}
-            onNodeClick={onNodeClick}
-            fitView
-            proOptions={{ hideAttribution: true }}
-          >
-            <Background gap={20} size={1} color="#E2E8F0" />
-            <Controls className="!bg-white !border-gray-200 !shadow-sm" />
-          </ReactFlow>
-        </div>
+      {/* 1. FULL WIDTH Interactive Graph Canvas */}
+      <div className="w-full relative h-[480px] sm:h-[540px] bg-gray-50 border-b border-gray-200">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          onConnect={onConnect}
+          onNodeClick={onNodeClick}
+          fitView
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background gap={20} size={1} color="#E2E8F0" />
+          <Controls className="!bg-white !border-gray-200 !shadow-sm no-print" />
+        </ReactFlow>
+      </div>
 
-        {/* Details Panel: Below graph on mobile, right sidebar on desktop */}
-        <aside className="w-full lg:w-[320px] border-t lg:border-t-0 lg:border-l border-gray-200 bg-white flex flex-col shrink-0">
-          <div className="border-b border-gray-200 px-5 py-4">
-            <h2 className="text-sm font-bold text-black">
-              Entity Details
+      {/* 2. FULL WIDTH Entity Details Section BELOW the Graph */}
+      <div className="w-full bg-white p-5 sm:p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-gray-500" />
+            <h2 className="text-sm font-bold text-black uppercase tracking-wider">
+              Entity Details & Forensic Intelligence
             </h2>
           </div>
+          {selectedNode && (
+            <span className="text-xs font-mono font-medium text-gray-500">
+              Node ID: #{selectedNode.id}
+            </span>
+          )}
+        </div>
 
-          {selectedNode ? (
-            <div className="p-5 space-y-4 overflow-y-auto">
+        {selectedNode ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Left Col: Type & Identifier */}
+            <div className="space-y-3">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                  Type
+                  Entity Type
                 </p>
-                <p className="mt-0.5 text-xs font-bold text-black">
-                  {selectedNode.data.type}
-                </p>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="text-xs font-bold text-black px-2.5 py-1 bg-gray-100 rounded">
+                    {selectedNode.data.type}
+                  </span>
+                  {selectedNode.data.threatLevel && (
+                    <span className="text-xs font-bold text-red-600 px-2 py-0.5 bg-red-50 border border-red-200 rounded">
+                      {selectedNode.data.threatLevel}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                  Name / Label
+                  Label
                 </p>
-                <p className="mt-0.5 text-xs font-semibold text-black">
+                <p className="mt-1 text-sm font-bold text-black">
                   {selectedNode.data.label}
                 </p>
               </div>
@@ -421,93 +455,136 @@ export default function InvestigationGraph() {
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Value / Identifier
                 </p>
-                <p className="mt-0.5 break-all font-mono text-xs text-gray-700 bg-gray-50 p-2 rounded border border-gray-100">
+                <p className="mt-1 break-all font-mono text-xs text-gray-800 bg-gray-50 p-2.5 rounded border border-gray-200">
                   {selectedNode.data.value}
                 </p>
               </div>
+            </div>
 
-              {selectedNode.data.threatLevel && (
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    Threat Level
-                  </p>
-                  <p className="mt-0.5 text-xs font-bold text-red-600">
-                    {selectedNode.data.threatLevel}
-                  </p>
-                </div>
-              )}
-
-              {selectedNode.data.details && (
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    Forensic Notes
-                  </p>
-                  <p className="mt-0.5 text-xs text-gray-600 leading-relaxed bg-slate-50 p-2.5 rounded border border-slate-100">
-                    {selectedNode.data.details}
-                  </p>
-                </div>
-              )}
-
-              <div className="border-t border-gray-200 pt-4">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                  Related Actions
-                </p>
-
-                <div className="space-y-2 text-xs">
-                  {selectedNode.data.type === 'Domain' && (
-                    <button
-                      onClick={() => navigate(`/domains/${selectedNode.data.value}`)}
-                      className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 font-medium text-left cursor-pointer transition-colors"
-                    >
-                      <span>Analyze Domain Intel</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
-                    </button>
-                  )}
-
-                  {selectedNode.data.type.includes('IP') && (
-                    <button
-                      onClick={() => navigate(`/trace/${selectedNode.data.value}`)}
-                      className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 font-medium text-left cursor-pointer transition-colors"
-                    >
-                      <span>Trace IP Geolocation</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
-                    </button>
-                  )}
-
-                  {selectedNode.data.type === 'Email' && (
-                    <button
-                      onClick={() => navigate('/forensics/eml-001')}
-                      className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 font-medium text-left cursor-pointer transition-colors"
-                    >
-                      <span>View Header Forensics</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
-                    </button>
-                  )}
-
-                  <div className="rounded-lg bg-gray-50 p-2.5 text-xs text-gray-600 border border-gray-100">
-                    Linked to Incident #{activeCaseKey.replace('case-', '')}
-                  </div>
-                </div>
+            {/* Middle Col: Forensic Notes */}
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                Forensic Analysis & Context
+              </p>
+              <div className="text-xs text-gray-700 leading-relaxed bg-slate-50 p-3.5 rounded-lg border border-slate-200 min-h-[110px]">
+                {selectedNode.data.details || 'No additional threat attributes recorded for this entity node.'}
               </div>
             </div>
-          ) : (
-            <div className="flex h-[320px] items-center justify-center px-8 text-center">
-              <div>
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-500">
-                  <Sparkles className="w-5 h-5 text-gray-400" />
-                </div>
 
-                <p className="font-bold text-xs text-black">
-                  Select an entity node
-                </p>
+            {/* Right Col: Actions */}
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                Correlated Deep Dive
+              </p>
 
-                <p className="mt-1 text-xs text-gray-500 leading-relaxed">
-                  Click any node on the canvas to inspect its parameters, threat classification, and linked indicators.
-                </p>
+              <div className="space-y-2">
+                {selectedNode.data.type === 'Domain' && (
+                  <button
+                    onClick={() => navigate(`/domains`)}
+                    className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs font-semibold text-left cursor-pointer transition-colors"
+                  >
+                    <span>Inspect Domain Reputation</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
+                  </button>
+                )}
+
+                {(selectedNode.data.type === 'IP Address' || selectedNode.data.type === 'IP') && (
+                  <button
+                    onClick={() => navigate(`/trace/${selectedNode.data.value}`)}
+                    className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs font-semibold text-left cursor-pointer transition-colors"
+                  >
+                    <span>Locate IP on Attack Map</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
+                  </button>
+                )}
+
+                {selectedNode.data.type === 'Email' && (
+                  <button
+                    onClick={() => navigate('/threats/eml-001')}
+                    className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs font-semibold text-left cursor-pointer transition-colors"
+                  >
+                    <span>Open Email Forensic Details</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
+                  </button>
+                )}
+
+                {selectedNode.data.type === 'Case' && (
+                  <button
+                    onClick={() => navigate(`/cases/${activeCaseKey}`)}
+                    className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs font-semibold text-left cursor-pointer transition-colors"
+                  >
+                    <span>Open Full Case Dossier</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
+                  </button>
+                )}
+
+                <button
+                  onClick={() => navigate('/threats')}
+                  className="w-full flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs font-semibold text-left cursor-pointer transition-colors"
+                >
+                  <span>Correlate Across All Threats</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
+                </button>
               </div>
             </div>
-          )}
-        </aside>
+          </div>
+        ) : (
+          <div className="py-8 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
+            <Info className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+            <p className="text-xs font-semibold text-gray-700">No entity selected</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">Click any node on the graph canvas above to inspect its parameters, threat classification, and linked indicators.</p>
+          </div>
+        )}
+      </div>
+
+      {/* 3. Complete Entity Inventory Breakdown Table (Great for Screen & PDF Export) */}
+      <div className="w-full bg-white p-5 sm:p-6">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          Case Node Inventory ({nodes.length} Connected Entities)
+        </h3>
+
+        <div className="overflow-x-auto border border-gray-200 rounded-lg">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold text-[10px] uppercase">
+              <tr>
+                <th className="py-2.5 px-4">Entity Type</th>
+                <th className="py-2.5 px-4">Label</th>
+                <th className="py-2.5 px-4">Value / Target</th>
+                <th className="py-2.5 px-4">Threat Level</th>
+                <th className="py-2.5 px-4">Forensic Notes</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {nodes.map((n) => (
+                <tr
+                  key={n.id}
+                  onClick={() => setSelectedNode(n)}
+                  className={`hover:bg-gray-50 cursor-pointer transition-colors ${
+                    selectedNode?.id === n.id ? 'bg-blue-50/50 font-medium' : ''
+                  }`}
+                >
+                  <td className="py-2.5 px-4 font-bold text-gray-800">
+                    {n.data.type}
+                  </td>
+                  <td className="py-2.5 px-4 text-gray-900 font-semibold">
+                    {n.data.label}
+                  </td>
+                  <td className="py-2.5 px-4 font-mono text-gray-600 break-all">
+                    {n.data.value}
+                  </td>
+                  <td className="py-2.5 px-4">
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700">
+                      {n.data.threatLevel || 'INFO'}
+                    </span>
+                  </td>
+                  <td className="py-2.5 px-4 text-gray-600 max-w-xs truncate">
+                    {n.data.details}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

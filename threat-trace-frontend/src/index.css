@@ -242,6 +242,41 @@
   z-index: 2 !important;
 }
 
+/* ============================================
+   Print Styles for Clean PDF Export
+   ============================================ */
+@media print {
+  header,
+  aside,
+  nav,
+  .no-print,
+  .react-flow__controls,
+  .react-flow__attribution,
+  button {
+    display: none !important;
+  }
+
+  body,
+  html,
+  #root,
+  main,
+  .print-clean {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  @page {
+    size: landscape;
+    margin: 10mm;
+  }
+}
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-border-subtle);
   border-radius: var(--radius-full);
