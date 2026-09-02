@@ -327,8 +327,9 @@ export function parseAndAnalyzeClientSide(rawText, filename = 'pasted_email.eml'
 
 // Master Scan Function
 export async function analyzeEmail(rawText, filename = 'pasted_email.eml') {
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://threattrace-oino.onrender.com';
   try {
-    const response = await fetch('http://localhost:8000/api/v1/emails/analyze', {
+    const response = await fetch(`${API_BASE}/api/v1/emails/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ raw_content: rawText, rawText: rawText, fileName: filename }),
